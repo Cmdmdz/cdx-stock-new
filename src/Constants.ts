@@ -35,6 +35,7 @@ export const server = {
   LOGIN_URL: `authen/login`,
   REGISTER_URL: `authen/register`,
   PRODUCT_URL: `stock/product`,
+  SLAE_URL: `stock/sale`,
   TRANSACTION_URL: `transaction`,
   REPORT_URL: `stock/report`,
   LOGIN_PASSED: `yes`,

@@ -28,14 +28,14 @@ const StockCreatePage: React.FC<any> = () => {
         <Card>
           <CardContent sx={{ padding: 4 }}>
             <Typography gutterBottom variant="h3">
-              Create Stock
+              Sale item
             </Typography>
 
             <Field style={{ marginTop: 16 }} fullWidth component={TextField} name="name" type="text" label="Name" />
             <br />
             <Field style={{ marginTop: 16 }} fullWidth component={TextField} name="price" type="number" label="Price" />
 
-            <Field style={{ marginTop: 16 }} fullWidth component={TextField} name="stock" type="number" label="Stock" />
+            <Field style={{ marginTop: 16 }} fullWidth component={TextField} name="amount" type="number" label="Amount" />
 
             <div style={{ margin: 16 }}>{showPreviewImage(values)}</div>
 
@@ -70,7 +70,7 @@ const StockCreatePage: React.FC<any> = () => {
             >
               Create
             </Button>
-            <Button component={Link} to="/stock" variant="outlined" fullWidth>
+            <Button component={Link} to="/dashboard" variant="outlined" fullWidth>
               Cancl
             </Button>
           </CardActions>
@@ -87,7 +87,7 @@ const StockCreatePage: React.FC<any> = () => {
         validate={(values) => {
           let errors: any = {};
           if (!values.name) errors.name = "Enter name";
-          if (values.stock < 10) errors.stock = "Min stock is not lower than 10";
+          if (values.amount < 10) errors.amount = "Min sale is not lower than 10";
           if (values.price < 100) errors.price = "Min price is not lower than 100";
           return errors;
         }}
@@ -97,9 +97,9 @@ const StockCreatePage: React.FC<any> = () => {
           let formData = new FormData();
           formData.append("name", values.name);
           formData.append("price", String(values.price));
-          formData.append("stock", String(values.stock));
+          formData.append("amount", String(values.amount));
           formData.append("image", values.file);
-          dispatch(stockActions.addProduct(formData));
+          dispatch(stockActions.addSale(formData));
           setSubmitting(false);
         }}
       >

@@ -1,22 +1,7 @@
 import * as React from "react";
-import { ThemeProvider, createTheme, styled, useTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme, styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import Header from "./components/layouts/Header";
 import Menu from "./components/layouts/Menu";
 import { Link, Navigate, Route, Routes } from "react-router-dom";
@@ -26,14 +11,16 @@ import StockPage from "./components/pages/StockPage";
 import StockCreatePage from "./components/pages/StockCreatePage";
 import StockEditPage from "./components/pages/StockEditPage";
 import ReportPage from "./components/pages/ReportPage";
-import AboutUs from "./components/pages/AboutUs";
-import { purple, blueGrey, blue } from "@mui/material/colors";
-import { useDispatch, useSelector } from "react-redux";
+import { blueGrey, blue } from "@mui/material/colors";
+import { useSelector } from "react-redux";
 import { RootReducers } from "./reducers";
 import * as loginActions from "./actions/login.action";
 import PublicRoutes from "./router/public.routes";
 import ProtectedRoutes from "./router/protected.routes";
 import { useAppDispatch } from ".";
+import Dashboard from "./components/pages/Dashboard";
+import EditSale from "./components/pages/EditSale";
+import CreateSale from "./components/pages/CreateSale";
 
 const drawerWidth = 240;
 
@@ -124,7 +111,7 @@ export default function App() {
             {/* Public routes */}
             <Route path="/" element={<PublicRoutes />}>
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+              {/* <Route path="/register" element={<RegisterPage />} /> */}
               <Route path="/" element={<Navigate to="/login" />} />
               <Route path="*" element={<NotFound />} />
             </Route>
@@ -134,8 +121,12 @@ export default function App() {
               <Route path="/stock" element={<StockPage />} />
               <Route path="/stock/create" element={<StockCreatePage />} />
               <Route path="/stock/edit/:id" element={<StockEditPage />} />
+              <Route path="/stock/sale/:id" element={<EditSale />} />
+              <Route path="/stock/sale" element={<CreateSale />} />
+
               <Route path="/report" element={<ReportPage />} />
-              <Route path="/aboutus" element={<AboutUs />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+
             </Route>
           </Routes>
         </Main>

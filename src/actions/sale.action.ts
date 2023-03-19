@@ -67,14 +67,6 @@ export const deleteProduct = (id: string) => {
 };
 
 
-export const loadSale = () => {
-  return (dispatch: any) => {
-    dispatch(setStockFetchingToState());
-    doGetSales(dispatch);
-  };
-};
-
-
 export const loadSaleByKeyword = (keyword: string) => {
   return async (dispatch: any) => {
     dispatch(setStockFetchingToState());
@@ -109,6 +101,6 @@ export const deleteSale = (id: string) => {
   return async (dispatch: Dispatch<AnyAction>) => {
     dispatch(setStockFetchingToState());
     await httpClient.delete(`${server.SLAE_URL}/${id}`);
-    await doGetSales(dispatch);
+    await doGetProducts(dispatch);
   };
 };

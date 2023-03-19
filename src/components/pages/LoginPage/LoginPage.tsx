@@ -73,9 +73,6 @@ const LoginPage: React.FC<any> = () => {
         {loginReducer.isError && <Alert severity="error">Login failed</Alert>}
 
         <Stack direction="row" spacing={2} sx={classes.buttons}>
-          <Button onClick={() => navigate("/register")} type="button" fullWidth variant="outlined">
-            Register
-          </Button>
           <Button type="submit" fullWidth variant="contained" color="primary" disabled={loginReducer.isFetching}>
             Login
           </Button>

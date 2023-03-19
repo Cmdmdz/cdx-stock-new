@@ -89,7 +89,7 @@ const StockEditPage: React.FC<any> = () => {
     );
   };
 
-  const initialValues: Product = { name: "Loading...", stock: 0, price: 0 };
+  const initialValues: Product = { name: "Loading...", stock: 0, price: 0, amount: 0 };
 
   return (
     <Box>

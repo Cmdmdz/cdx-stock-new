@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DataGrid, GridColDef, GridRenderCellParams, GridToolbarContainer, GridToolbarExport, GridValueGetterParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -30,6 +30,7 @@ import { useDebounce, useDebounceCallback } from "@react-hook/debounce";
 import { Product } from "../../../types/product.type";
 import StockCard from "../../layouts/StockCard";
 import { useAppDispatch } from "../../..";
+import { useState } from "react";
 
 interface QuickSearchToolbarProps {
   clearSearch: () => void;
@@ -79,13 +80,12 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
           },
         }}
       />
-          <GridToolbarExport />
 
       <Fab
         color="primary"
         aria-label="add"
         component={Link}
-        to="/stock/create"
+        to="/stock/sale"
         sx={{
           position: "absolute",
           top: 10,
@@ -108,11 +108,12 @@ export default function StockPage() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    dispatch(stockActions.loadStockByKeyword(keywordSearch));
+    dispatch(stockActions.loadSaleByKeyword(keywordSearch));
   }, [keywordSearch]);
 
   React.useEffect(() => {
-    dispatch(stockActions.loadStock());
+    dispatch(stockActions.loadSale());
+    calculateTotal();
   }, []);
 
   const stockColumns: GridColDef[] = [
@@ -138,9 +139,9 @@ export default function StockPage() {
       width: 400,
     },
     {
-      headerName: "STOCK",
+      headerName: "AMOUNT",
       width: 120,
-      field: "stock",
+      field: "amount",
       renderCell: ({ value }: GridRenderCellParams<string>) => (
         <Typography variant="body1">
           <NumberFormat
@@ -186,15 +187,7 @@ export default function StockPage() {
       width: 120,
       renderCell: ({ row }: GridRenderCellParams<string>) => (
         <Stack direction="row">
-          <IconButton
-            aria-label="edit"
-            size="large"
-            onClick={() => {
-              navigate("/stock/edit/" + row.id);
-            }}
-          >
-            <EditIcon fontSize="inherit" />
-          </IconButton>
+          
           <IconButton
             aria-label="delete"
             size="large"
@@ -211,7 +204,7 @@ export default function StockPage() {
   ];
 
   const handleDeleteConfirm = () => {
-    dispatch(stockActions.deleteProduct(String(selectedProduct!.id!)));
+    dispatch(stockActions.deleteSale(String(selectedProduct!.id!)));
     setOpenDialog(false);
   };
 
@@ -250,9 +243,40 @@ export default function StockPage() {
     );
   };
 
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+
+
+  const calculateTotal = () => {
+    let result = 0;
+
+    stockReducer.result.forEach((element: { amount: number }) => {
+      result += element.amount;
+    });
+
+    setTotalAmount(result);
+  };
+
   return (
     <Box>
- 
+      {/* Summary Icons */}
+      <Grid container style={{ marginBottom: 16 }} spacing={7}>
+        <Grid item lg={3} md={6}>
+          <StockCard icon={AddShoppingCart} title="TOTAL" subtitle={totalAmount ? totalAmount.toString() : ''} color="#00a65a" />
+        </Grid>
+
+        <Grid item lg={3} md={6}>
+          <StockCard icon={NewReleases} title="EMPTY" subtitle="9 PCS." color="#f39c12" />
+        </Grid>
+
+        <Grid item lg={3} md={6}>
+          <StockCard icon={AssignmentReturn} title="RETURN" subtitle="1 PCS." color="#dd4b39" />
+        </Grid>
+
+        <Grid item lg={3} md={6}>
+          <StockCard icon={Star} title="LOSS" subtitle="5 PCS." color="#00c0ef" />
+        </Grid>
+      </Grid>
+
       <DataGrid
         components={{ Toolbar: QuickSearchToolbar }}
         componentsProps={{

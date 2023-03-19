@@ -41,7 +41,7 @@ export const login = (user: User, navigate: any) => {
           localStorage.setItem(TOKEN, result.data.token!);
           dispatch(setLoginSuccessToState(result.data));
           alert("Login Successfully");
-          navigate("/stock");
+          navigate("/dashboard");
         }, 1000);
       } else {
         dispatch(setLoginFailedToState());

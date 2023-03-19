@@ -4,27 +4,37 @@ import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import "chart.js/auto";
 import { Chart } from "react-chartjs-2";
+import { ChartData, ChartOptions } from "chart.js/auto";
 
-export default () => {
+
+interface Props { }
+
+interface State {
+  chartType: string;
+  chartData1: number[];
+  chartData2: number[];
+}
+
+const MyComponent: React.FC<Props> = (props: Props): JSX.Element => {
   const [chartType, setChartType] = useState<string>("bar");
-  const [chartData1, setChartData1] = useState([]);
-  const [chartData2, setChartData2] = useState([]);
+  const [chartData1, setChartData1] = useState<number[]>([]);
+  const [chartData2, setChartData2] = useState<number[]>([]);
 
-  function getRandomInt(): any {
-    let randoms = [];
+  function getRandomInt(): number[] {
+    let randoms: number[] = [];
     for (let index = 0; index < 8; index++) {
       randoms.push(Math.floor(Math.random() * (50000 - 5 + 1)) + 5);
     }
     return randoms;
   }
 
-  const data: any = {
+  const data: ChartData<"bar" | "line" | "pie", number[], string> = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
       {
         label: "Revenue 2022",
         fill: false,
-        lineTension: 0.1, // line curve
+        // lineTension: 0.1, // line curve
         backgroundColor: [
           "rgba(54, 162, 235, 0.2)",
           "rgba(255, 99, 132, 0.2)",
@@ -53,8 +63,7 @@ export default () => {
       {
         label: "Revenue 2023",
         fill: false,
-        lineTension: 0.1, // line curve
-        borderWidth: 0.5, // line thiness
+        // lineTension: 0.1, // line curve
         backgroundColor: "rgba(0, 0, 0, 0.1)",
         borderColor: "rgba(0, 0, 0, 0.3)",
         borderCapStyle: "butt",
@@ -75,19 +84,19 @@ export default () => {
     ],
   };
 
-  const chartOption: any = {
+  const chartOption: ChartOptions = {
     plugins: {
       tooltip: {
         callbacks: {
           title: function () {
-            return "CodeMobiles";
+            return "CMS";
           },
         },
       },
       legend: { display: true },
       title: {
         display: true,
-        text: "CodeMobiles ChartJS",
+        text: "CMS",
         position: "top",
       },
     },
@@ -95,8 +104,8 @@ export default () => {
     scales: {
       y: {
         ticks: {
-          beginAtZero: true,
-          callback: function (value: any, index: any, values: any) {
+          // beginAtZero: true,
+          callback: function (value: any, _index: any) {
             return "฿" + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           },
         },
@@ -140,3 +149,5 @@ export default () => {
     </Paper>
   );
 };
+
+export default MyComponent;

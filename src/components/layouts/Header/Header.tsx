@@ -24,6 +24,9 @@ import { useNavigate } from "react-router-dom";
 import * as loginActions from "../../../actions/login.action";
 import { useDispatch } from "react-redux";
 import { useAppDispatch } from "../../..";
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
+
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -103,26 +106,17 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" noWrap component="div">
-          CMStock Workshop with ReactJS - Typescript (TS) V.{process.env.REACT_APP_VERSION}
+          CMStock (TS) V.{process.env.REACT_APP_VERSION}
         </Typography>
 
         <Box sx={{ flexGrow: 1 }} />
 
         <Typography variant="h6" noWrap component="div" fontWeight="300">
-          Updated 2022
+          Updated 2023
         </Typography>
 
         <Box sx={{ display: { xs: "none", md: "flex" } }}>
-          <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-            <Badge badgeContent={4} color="error">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
-            <Badge badgeContent={17} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+         
           <IconButton
             size="large"
             edge="end"
@@ -133,7 +127,7 @@ export default function Header({ open, onDrawerOpen }: HeaderProp) {
             }}
             color="inherit"
           >
-            <AccountCircle />
+            <ExitToAppIcon />
           </IconButton>
         </Box>
       </Toolbar>
