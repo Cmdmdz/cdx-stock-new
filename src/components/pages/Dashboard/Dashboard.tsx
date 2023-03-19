@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams, GridToolbarExport, GridValueGetterParams } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -24,18 +24,29 @@ import {
 } from "@mui/material";
 import NumberFormat from "react-number-format";
 import Moment from "react-moment";
-import { Add, AddShoppingCart, AssignmentReturn, Clear, NewReleases, Search, Star } from "@mui/icons-material";
+import { Add, AddShoppingCart, AssignmentReturn, Clear, NewReleases, Search, Star, GetApp } from "@mui/icons-material";
 import { Link, useNavigate } from "react-router-dom";
 import { useDebounce, useDebounceCallback } from "@react-hook/debounce";
 import { Product } from "../../../types/product.type";
 import StockCard from "../../layouts/StockCard";
 import { useAppDispatch } from "../../..";
 import { useState } from "react";
+import jsPDF from "jspdf";
+import 'jspdf-autotable';
+import Papa from 'papaparse';
+
+
 
 interface QuickSearchToolbarProps {
   clearSearch: () => void;
   onChange: () => void;
   value: string;
+}
+
+declare module 'jspdf' {
+  interface jsPDF {
+    autoTable: (options: any) => jsPDF;
+  }
 }
 
 function QuickSearchToolbar(props: QuickSearchToolbarProps) {
@@ -80,7 +91,7 @@ function QuickSearchToolbar(props: QuickSearchToolbarProps) {
           },
         }}
       />
-
+      <GridToolbarExport />
       <Fab
         color="primary"
         aria-label="add"
@@ -187,7 +198,7 @@ export default function StockPage() {
       width: 120,
       renderCell: ({ row }: GridRenderCellParams<string>) => (
         <Stack direction="row">
-          
+
           <IconButton
             aria-label="delete"
             size="large"
@@ -256,6 +267,35 @@ export default function StockPage() {
     setTotalAmount(result);
   };
 
+  function exportCSV(columns: any, rows: any) {
+    const headers = columns.map((column: any) => column.headerName);
+    const data = rows.map((row: any) => columns.map((column: any) => row[column.field] || ''));
+    data.unshift(headers);
+
+    const csv = Papa.unparse(data);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'data_export.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  const ExportButtons = ({ columns, rows }: any) => (
+    <div>
+      <IconButton onClick={() => exportCSV(columns, rows)}>
+        <GetApp />
+      </IconButton>
+      {/* <IconButton onClick={() => exportPDF(columns, rows)}>
+        <GetApp />
+      </IconButton> */}
+    </div>
+  );
+
   return (
     <Box>
       {/* Summary Icons */}
@@ -277,7 +317,7 @@ export default function StockPage() {
         </Grid>
       </Grid>
 
-      <DataGrid
+      {/* <DataGrid
         components={{ Toolbar: QuickSearchToolbar }}
         componentsProps={{
           toolbar: {
@@ -293,6 +333,30 @@ export default function StockPage() {
           },
         }}
         sx={{ backgroundColor: "white", height: "70vh" }}
+        rows={stockReducer.result}
+        columns={stockColumns}
+        pageSize={15}
+        rowsPerPageOptions={[15]}
+      /> */}
+
+      <DataGrid
+        components={{ Toolbar: QuickSearchToolbar }}
+        componentsProps={{
+          toolbar: {
+            value: keywordSearchNoDelay,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+              setKeywordSearch(e.target.value);
+              setKeywordSearchNoDelay(e.target.value);
+            },
+            clearSearch: () => {
+              setKeywordSearch('');
+              setKeywordSearchNoDelay('');
+            },
+
+            exportButtons: <ExportButtons columns={stockColumns} rows={stockReducer.result} />,
+          },
+        }}
+        sx={{ backgroundColor: 'white', height: '70vh' }}
         rows={stockReducer.result}
         columns={stockColumns}
         pageSize={15}

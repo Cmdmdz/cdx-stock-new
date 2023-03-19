@@ -122,15 +122,7 @@ const MyComponent: React.FC<Props> = (props: Props): JSX.Element => {
     <Paper sx={{ padding: 4 }}>
       <Typography variant="h1">Sale Chart</Typography>
       <ButtonGroup size="large" color="primary" aria-label="large outlined primary button group">
-        <Button variant={chartType === "line" ? "contained" : "outlined"} onClick={() => setChartType("line")}>
-          Line
-        </Button>
-        <Button variant={chartType === "bar" ? "contained" : "outlined"} onClick={() => setChartType("bar")}>
-          Bar
-        </Button>
-        <Button variant={chartType === "pie" ? "contained" : "outlined"} onClick={() => setChartType("pie")}>
-          Pie
-        </Button>
+    
       </ButtonGroup>
       <IconButton
         aria-label="refresh"
@@ -142,9 +134,7 @@ const MyComponent: React.FC<Props> = (props: Props): JSX.Element => {
         <RefreshIcon />
       </IconButton>
       <div style={{ height: "55vh" }}>
-        {chartType === "line" && <Chart type={"line"} data={data} options={chartOption} />}
-        {chartType === "pie" && <Chart type="pie" data={data} options={chartOption} />}
-        {chartType === "bar" && <Chart type="bar" data={data} options={chartOption} />}
+      <Chart type={"line"} data={data} options={chartOption} />
       </div>
     </Paper>
   );
